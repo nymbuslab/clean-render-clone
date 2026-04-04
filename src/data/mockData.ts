@@ -1,0 +1,79 @@
+// Mock data for the entire prototype
+export const mockProducts = [
+  { id: "1", name: "Camiseta Básica Algodão", price: 59.90, stock: 45, category: "Camisetas", status: "active", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=200&fit=crop" },
+  { id: "2", name: "Calça Jeans Slim", price: 149.90, stock: 23, category: "Calças", status: "active", image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&h=200&fit=crop" },
+  { id: "3", name: "Tênis Casual Urbano", price: 219.90, stock: 12, category: "Calçados", status: "active", image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=200&h=200&fit=crop" },
+  { id: "4", name: "Jaqueta Corta-Vento", price: 189.90, stock: 8, category: "Jaquetas", status: "active", image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&h=200&fit=crop" },
+  { id: "5", name: "Boné Trucker Classic", price: 49.90, stock: 67, category: "Acessórios", status: "active", image: "https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=200&h=200&fit=crop" },
+  { id: "6", name: "Mochila Urban Pro", price: 129.90, stock: 0, category: "Acessórios", status: "inactive", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop" },
+  { id: "7", name: "Bermuda Sarja Premium", price: 89.90, stock: 34, category: "Bermudas", status: "active", image: "https://images.unsplash.com/photo-1565084888279-aca607ecce0c?w=200&h=200&fit=crop" },
+  { id: "8", name: "Polo Fit Essential", price: 79.90, stock: 19, category: "Camisetas", status: "active", image: "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=200&h=200&fit=crop" },
+];
+
+export const mockOrders = [
+  { id: "#1001", customer: "Maria Silva", date: "2024-03-15", total: 259.80, status: "entregue", payment: "aprovado", items: 3 },
+  { id: "#1002", customer: "João Santos", date: "2024-03-15", total: 149.90, status: "em_separacao", payment: "aprovado", items: 1 },
+  { id: "#1003", customer: "Ana Costa", date: "2024-03-14", total: 439.70, status: "pago", payment: "aprovado", items: 4 },
+  { id: "#1004", customer: "Carlos Oliveira", date: "2024-03-14", total: 89.90, status: "aguardando_pagamento", payment: "pendente", items: 1 },
+  { id: "#1005", customer: "Fernanda Lima", date: "2024-03-13", total: 329.80, status: "saiu_entrega", payment: "aprovado", items: 2 },
+  { id: "#1006", customer: "Pedro Almeida", date: "2024-03-13", total: 59.90, status: "cancelado", payment: "recusado", items: 1 },
+  { id: "#1007", customer: "Lucia Ferreira", date: "2024-03-12", total: 189.90, status: "pronto_entrega", payment: "aprovado", items: 1 },
+  { id: "#1008", customer: "Roberto Dias", date: "2024-03-12", total: 519.60, status: "entregue", payment: "aprovado", items: 5 },
+];
+
+export const mockCustomers = [
+  { id: "1", name: "Maria Silva", email: "maria@email.com", orders: 8, totalSpent: 1250.40, lastOrder: "2024-03-15", status: "ativo" },
+  { id: "2", name: "João Santos", email: "joao@email.com", orders: 3, totalSpent: 489.70, lastOrder: "2024-03-15", status: "ativo" },
+  { id: "3", name: "Ana Costa", email: "ana@email.com", orders: 12, totalSpent: 2340.80, lastOrder: "2024-03-14", status: "ativo" },
+  { id: "4", name: "Carlos Oliveira", email: "carlos@email.com", orders: 1, totalSpent: 89.90, lastOrder: "2024-03-14", status: "novo" },
+  { id: "5", name: "Fernanda Lima", email: "fernanda@email.com", orders: 5, totalSpent: 890.50, lastOrder: "2024-03-13", status: "ativo" },
+  { id: "6", name: "Pedro Almeida", email: "pedro@email.com", orders: 2, totalSpent: 159.80, lastOrder: "2024-03-13", status: "inativo" },
+];
+
+export const orderStatusLabels: Record<string, string> = {
+  aguardando_pagamento: "Aguardando Pagamento",
+  pago: "Pago",
+  em_separacao: "Em Separação",
+  pronto_entrega: "Pronto p/ Entrega",
+  saiu_entrega: "Saiu p/ Entrega",
+  entregue: "Entregue",
+  cancelado: "Cancelado",
+};
+
+export const orderStatusColors: Record<string, string> = {
+  aguardando_pagamento: "bg-warning/10 text-warning",
+  pago: "bg-info/10 text-info",
+  em_separacao: "bg-primary/10 text-primary",
+  pronto_entrega: "bg-accent/10 text-accent",
+  saiu_entrega: "bg-info/10 text-info",
+  entregue: "bg-success/10 text-success",
+  cancelado: "bg-destructive/10 text-destructive",
+};
+
+export const mockStats = {
+  revenue: 15420.30,
+  orders: 47,
+  avgTicket: 328.09,
+  customers: 32,
+  revenueGrowth: 12.5,
+  ordersGrowth: 8.3,
+  ticketGrowth: -2.1,
+  customersGrowth: 15.0,
+};
+
+export const mockRevenueChart = [
+  { month: "Out", value: 8200 },
+  { month: "Nov", value: 11500 },
+  { month: "Dez", value: 14800 },
+  { month: "Jan", value: 12300 },
+  { month: "Fev", value: 13100 },
+  { month: "Mar", value: 15420 },
+];
+
+export const mockTopProducts = [
+  { name: "Camiseta Básica Algodão", sold: 34, revenue: 2036.60 },
+  { name: "Calça Jeans Slim", sold: 21, revenue: 3147.90 },
+  { name: "Tênis Casual Urbano", sold: 15, revenue: 3298.50 },
+  { name: "Bermuda Sarja Premium", sold: 12, revenue: 1078.80 },
+  { name: "Polo Fit Essential", sold: 10, revenue: 799.00 },
+];
