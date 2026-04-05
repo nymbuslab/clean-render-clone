@@ -1,13 +1,22 @@
 // Mock data for the entire prototype
+import camisetaBasica from "@/assets/products/camiseta-basica.jpg";
+import calcaJeans from "@/assets/products/calca-jeans.jpg";
+import tenisCasual from "@/assets/products/tenis-casual.jpg";
+import jaquetaCorta from "@/assets/products/jaqueta-corta-vento.jpg";
+import boneTrucker from "@/assets/products/bone-trucker.jpg";
+import mochilaUrban from "@/assets/products/mochila-urban.jpg";
+import bermudaSarja from "@/assets/products/bermuda-sarja.jpg";
+import poloEssential from "@/assets/products/polo-essential.jpg";
+
 export const mockProducts = [
-  { id: "1", name: "Camiseta Básica Algodão", price: 59.90, stock: 45, category: "Camisetas", status: "active", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=200&fit=crop" },
-  { id: "2", name: "Calça Jeans Slim", price: 149.90, stock: 23, category: "Calças", status: "active", image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&h=200&fit=crop" },
-  { id: "3", name: "Tênis Casual Urbano", price: 219.90, stock: 12, category: "Calçados", status: "active", image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=200&h=200&fit=crop" },
-  { id: "4", name: "Jaqueta Corta-Vento", price: 189.90, stock: 8, category: "Jaquetas", status: "active", image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&h=200&fit=crop" },
-  { id: "5", name: "Boné Trucker Classic", price: 49.90, stock: 67, category: "Acessórios", status: "active", image: "https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=200&h=200&fit=crop" },
-  { id: "6", name: "Mochila Urban Pro", price: 129.90, stock: 0, category: "Acessórios", status: "inactive", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop" },
-  { id: "7", name: "Bermuda Sarja Premium", price: 89.90, stock: 34, category: "Bermudas", status: "active", image: "https://images.unsplash.com/photo-1565084888279-aca607ecce0c?w=200&h=200&fit=crop" },
-  { id: "8", name: "Polo Fit Essential", price: 79.90, stock: 19, category: "Camisetas", status: "active", image: "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=200&h=200&fit=crop" },
+  { id: "1", name: "Camiseta Básica Algodão", price: 59.90, stock: 45, category: "Camisetas", status: "active", image: camisetaBasica },
+  { id: "2", name: "Calça Jeans Slim", price: 149.90, stock: 23, category: "Calças", status: "active", image: calcaJeans },
+  { id: "3", name: "Tênis Casual Urbano", price: 219.90, stock: 12, category: "Calçados", status: "active", image: tenisCasual },
+  { id: "4", name: "Jaqueta Corta-Vento", price: 189.90, stock: 8, category: "Jaquetas", status: "active", image: jaquetaCorta },
+  { id: "5", name: "Boné Trucker Classic", price: 49.90, stock: 67, category: "Acessórios", status: "active", image: boneTrucker },
+  { id: "6", name: "Mochila Urban Pro", price: 129.90, stock: 0, category: "Acessórios", status: "inactive", image: mochilaUrban },
+  { id: "7", name: "Bermuda Sarja Premium", price: 89.90, stock: 34, category: "Bermudas", status: "active", image: bermudaSarja },
+  { id: "8", name: "Polo Fit Essential", price: 79.90, stock: 19, category: "Camisetas", status: "active", image: poloEssential },
 ];
 
 export const mockOrders = [

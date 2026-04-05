@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { mockProducts } from "@/data/mockData";
 import { ArrowRight, ShoppingCart } from "lucide-react";
+import heroBanner from "@/assets/hero-banner.jpg";
 
 export default function StorePage() {
   const fmt = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
