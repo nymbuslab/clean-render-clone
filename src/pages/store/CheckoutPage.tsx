@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { mockProducts } from "@/data/mockData";
-import { Lock, CreditCard, QrCode } from "lucide-react";
+import { Lock, CreditCard, QrCode, ShieldCheck, Truck, Tag, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
@@ -17,11 +18,33 @@ export default function CheckoutPage() {
   const fmt = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
   const shipping = 8;
-  const total = subtotal + shipping;
+  const discount = 0;
+  const total = subtotal + shipping - discount;
   const [payMethod, setPayMethod] = useState("pix");
+  const [coupon, setCoupon] = useState("");
+
+  const totalItems = cartItems.reduce((s, i) => s + i.qty, 0);
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Progress steps */}
+      <div className="flex items-center justify-center gap-2 mb-8 text-sm">
+        <span className="flex items-center gap-1.5 text-muted-foreground">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-medium">1</span>
+          Carrinho
+        </span>
+        <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+        <span className="flex items-center gap-1.5 text-primary font-medium">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-medium">2</span>
+          Checkout
+        </span>
+        <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+        <span className="flex items-center gap-1.5 text-muted-foreground">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-medium">3</span>
+          Confirmação
+        </span>
+      </div>
+
       <div className="flex items-center gap-2 mb-6">
         <Lock className="h-5 w-5 text-success" />
         <h1 className="text-2xl font-bold">Checkout Seguro</h1>
@@ -88,10 +111,11 @@ export default function CheckoutPage() {
               <label className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/5">
                 <RadioGroupItem value="pix" />
                 <QrCode className="h-5 w-5 text-success" />
-                <div>
+                <div className="flex-1">
                   <p className="font-medium text-sm">Pix</p>
                   <p className="text-xs text-muted-foreground">Aprovação imediata</p>
                 </div>
+                <Badge variant="secondary" className="text-xs bg-success/10 text-success border-0">5% off</Badge>
               </label>
               <label className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/5">
                 <RadioGroupItem value="card" />
@@ -114,34 +138,112 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        {/* Summary */}
+        {/* Summary - Redesigned */}
         <div className="h-fit sticky top-20 space-y-4">
-          <div className="rounded-xl border bg-card p-6 space-y-4">
-            <h3 className="font-semibold">Resumo</h3>
-            <div className="space-y-3">
+          <div className="rounded-xl border bg-card overflow-hidden">
+            {/* Header */}
+            <div className="bg-muted/50 px-6 py-4 border-b">
+              <h3 className="font-semibold text-base">Resumo do Pedido</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">{totalItems} {totalItems === 1 ? "item" : "itens"}</p>
+            </div>
+
+            {/* Items */}
+            <div className="px-6 py-4 space-y-4">
               {cartItems.map(i => (
-                <div key={i.id} className="flex items-center gap-3">
-                  <img src={i.image} alt={i.name} className="h-12 w-12 rounded-lg object-cover" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{i.name}</p>
-                    <p className="text-xs text-muted-foreground">Qtd: {i.qty}</p>
+                <div key={i.id} className="flex items-start gap-3">
+                  <div className="relative">
+                    <img src={i.image} alt={i.name} className="h-16 w-16 rounded-lg object-cover border" />
+                    <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+                      {i.qty}
+                    </span>
                   </div>
-                  <p className="text-sm font-medium">{fmt(i.price * i.qty)}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium leading-tight truncate">{i.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Tam: M</p>
+                    <p className="text-xs text-muted-foreground">Unit: {fmt(i.price)}</p>
+                  </div>
+                  <p className="text-sm font-semibold whitespace-nowrap">{fmt(i.price * i.qty)}</p>
                 </div>
               ))}
             </div>
+
             <Separator />
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{fmt(subtotal)}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Frete</span><span>{fmt(shipping)}</span></div>
+
+            {/* Coupon */}
+            <div className="px-6 py-4">
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                  <Input
+                    placeholder="Cupom de desconto"
+                    className="pl-9 h-9 text-sm"
+                    value={coupon}
+                    onChange={e => setCoupon(e.target.value)}
+                  />
+                </div>
+                <Button variant="outline" size="sm" className="h-9 px-4 text-xs font-medium">
+                  Aplicar
+                </Button>
+              </div>
             </div>
+
             <Separator />
-            <div className="flex justify-between font-bold text-lg">
-              <span>Total</span><span className="text-primary">{fmt(total)}</span>
+
+            {/* Totals */}
+            <div className="px-6 py-4 space-y-2.5">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Subtotal</span>
+                <span>{fmt(subtotal)}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground flex items-center gap-1.5">
+                  <Truck className="h-3.5 w-3.5" /> Frete
+                </span>
+                <span>{fmt(shipping)}</span>
+              </div>
+              {discount > 0 && (
+                <div className="flex justify-between text-sm text-success">
+                  <span>Desconto</span>
+                  <span>-{fmt(discount)}</span>
+                </div>
+              )}
             </div>
-            <Button className="w-full gradient-primary text-primary-foreground rounded-full" size="lg">
-              <Lock className="h-4 w-4 mr-2" /> Finalizar Pedido
-            </Button>
+
+            <Separator />
+
+            {/* Total + CTA */}
+            <div className="px-6 py-5 space-y-4">
+              <div className="flex justify-between items-baseline">
+                <span className="font-bold text-lg">Total</span>
+                <div className="text-right">
+                  <span className="font-bold text-xl text-primary">{fmt(total)}</span>
+                  {payMethod === "card" && (
+                    <p className="text-xs text-muted-foreground mt-0.5">ou 3x de {fmt(total / 3)}</p>
+                  )}
+                  {payMethod === "pix" && (
+                    <p className="text-xs text-success mt-0.5 font-medium">
+                      {fmt(total * 0.95)} no Pix
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <Button className="w-full gradient-primary text-primary-foreground rounded-full h-12 text-base font-semibold" size="lg">
+                <Lock className="h-4 w-4 mr-2" /> Finalizar Pedido
+              </Button>
+
+              {/* Trust badges */}
+              <div className="flex items-center justify-center gap-4 pt-1">
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  <span className="text-[10px]">Compra Segura</span>
+                </div>
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <Lock className="h-3.5 w-3.5" />
+                  <span className="text-[10px]">Dados Protegidos</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
