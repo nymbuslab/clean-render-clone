@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { mockProducts } from "@/data/mockData";
 import { ArrowRight, ShoppingCart } from "lucide-react";
+import heroBanner from "@/assets/hero-banner.jpg";
 
 export default function StorePage() {
   const fmt = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -11,20 +12,24 @@ export default function StorePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="gradient-primary py-16 md:py-24">
-        <div className="container mx-auto px-4 text-center">
-          <Badge className="mb-4 bg-primary-foreground/20 text-primary-foreground border-0 text-sm px-4 py-1">
-            Nova Coleção 2024
-          </Badge>
-          <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-4">
-            Estilo que combina<br />com você
-          </h1>
-          <p className="text-primary-foreground/80 text-lg mb-8 max-w-md mx-auto">
-            Descubra as últimas tendências em moda com preços que cabem no seu bolso.
-          </p>
-          <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-8">
-            Ver Coleção <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+      <section className="relative overflow-hidden">
+        <img src={heroBanner} alt="Nova coleção de moda urbana" className="w-full h-[320px] md:h-[480px] object-cover" width={1920} height={800} />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-transparent" />
+        <div className="absolute inset-0 flex items-center">
+          <div className="container mx-auto px-4">
+            <Badge className="mb-4 bg-primary/20 text-primary border-0 text-sm px-4 py-1">
+              Nova Coleção 2024
+            </Badge>
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
+              Estilo que combina<br />com você
+            </h1>
+            <p className="text-muted-foreground text-lg mb-8 max-w-md">
+              Descubra as últimas tendências em moda com preços que cabem no seu bolso.
+            </p>
+            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8">
+              Ver Coleção <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </section>
 
