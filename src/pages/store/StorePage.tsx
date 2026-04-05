@@ -34,7 +34,7 @@ export default function StorePage() {
       </section>
 
       {/* Categories */}
-      <section className="container mx-auto px-4 -mt-8">
+      <section className="container mx-auto px-4 mt-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {["Camisetas", "Calças", "Calçados", "Acessórios"].map(cat => (
             <button key={cat} className="rounded-xl bg-card p-5 text-center shadow-card hover:shadow-elevated transition-shadow">
