@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Edit, Trash2, Copy, ExternalLink, Package, BarChart3 } from "lucide-react";
 
 interface Product {
-  id: string;
+  id?: string;
   name: string;
   description?: string;
   price: number;
