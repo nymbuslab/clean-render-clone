@@ -31,12 +31,14 @@ export const mockOrders = [
 ];
 
 export const mockCustomers = [
-  { id: "1", name: "Maria Silva", email: "maria@email.com", orders: 8, totalSpent: 1250.40, lastOrder: "2024-03-15", status: "ativo" },
-  { id: "2", name: "João Santos", email: "joao@email.com", orders: 3, totalSpent: 489.70, lastOrder: "2024-03-15", status: "ativo" },
-  { id: "3", name: "Ana Costa", email: "ana@email.com", orders: 12, totalSpent: 2340.80, lastOrder: "2024-03-14", status: "ativo" },
-  { id: "4", name: "Carlos Oliveira", email: "carlos@email.com", orders: 1, totalSpent: 89.90, lastOrder: "2024-03-14", status: "novo" },
-  { id: "5", name: "Fernanda Lima", email: "fernanda@email.com", orders: 5, totalSpent: 890.50, lastOrder: "2024-03-13", status: "ativo" },
-  { id: "6", name: "Pedro Almeida", email: "pedro@email.com", orders: 2, totalSpent: 159.80, lastOrder: "2024-03-13", status: "inativo" },
+  { id: "1", name: "Maria Silva", email: "maria@email.com", phone: "(11) 99123-4567", cpf: "123.456.789-00", orders: 8, totalSpent: 1250.40, lastOrder: "2024-03-15", status: "ativo", createdAt: "2023-06-10", address: { street: "Rua das Flores", number: "100", neighborhood: "Centro", city: "São Paulo", state: "SP", zip: "01000-000" } },
+  { id: "2", name: "João Santos", email: "joao@email.com", phone: "(11) 98765-4321", cpf: "234.567.890-11", orders: 3, totalSpent: 489.70, lastOrder: "2024-03-15", status: "ativo", createdAt: "2023-09-22", address: { street: "Av. Paulista", number: "147", complement: "Sala 302", neighborhood: "Bela Vista", city: "São Paulo", state: "SP", zip: "02000-111" } },
+  { id: "3", name: "Ana Costa", email: "ana@email.com", phone: "(21) 97654-3210", cpf: "345.678.901-22", orders: 12, totalSpent: 2340.80, lastOrder: "2024-03-14", status: "ativo", createdAt: "2023-01-15", address: { street: "Rua XV de Novembro", number: "194", neighborhood: "Jardins", city: "São Paulo", state: "SP", zip: "03000-222" } },
+  { id: "4", name: "Carlos Oliveira", email: "carlos@email.com", phone: "(11) 96543-2109", orders: 1, totalSpent: 89.90, lastOrder: "2024-03-14", status: "novo", createdAt: "2024-03-14" },
+  { id: "5", name: "Fernanda Lima", email: "fernanda@email.com", phone: "(11) 95432-1098", cpf: "567.890.123-44", orders: 5, totalSpent: 890.50, lastOrder: "2024-03-13", status: "ativo", createdAt: "2023-11-05", address: { street: "Rua Augusta", number: "288", neighborhood: "Pinheiros", city: "São Paulo", state: "SP", zip: "05000-444" } },
+  { id: "6", name: "Pedro Almeida", email: "pedro@email.com", phone: "(11) 94321-0987", orders: 2, totalSpent: 159.80, lastOrder: "2024-03-13", status: "inativo", createdAt: "2023-04-20" },
+  { id: "7", name: "Lucia Ferreira", email: "lucia@email.com", phone: "(21) 93210-9876", cpf: "789.012.345-66", orders: 4, totalSpent: 720.60, lastOrder: "2024-03-12", status: "ativo", createdAt: "2023-07-18", address: { street: "Av. Atlântica", number: "382", neighborhood: "Ipanema", city: "Rio de Janeiro", state: "RJ", zip: "07000-666" } },
+  { id: "8", name: "Roberto Dias", email: "roberto@email.com", phone: "(11) 92109-8765", cpf: "890.123.456-77", orders: 6, totalSpent: 1580.40, lastOrder: "2024-03-12", status: "ativo", createdAt: "2023-02-28", address: { street: "Rua Bela Cintra", number: "429", complement: "Apto 1204", neighborhood: "Moema", city: "São Paulo", state: "SP", zip: "08000-777" } },
 ];
 
 export const orderStatusLabels: Record<string, string> = {
