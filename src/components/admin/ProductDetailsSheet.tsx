@@ -88,7 +88,7 @@ export default function ProductDetailsSheet({ open, onOpenChange, product, onEdi
             <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-primary" /> Preços
             </h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="bg-muted/50 rounded-lg p-3 text-center">
                 <p className="text-xs text-muted-foreground">Venda</p>
                 <p className="font-semibold text-lg">{fmt(product.price)}</p>
