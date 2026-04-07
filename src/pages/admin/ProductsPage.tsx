@@ -147,7 +147,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: "Total", value: products.length, icon: Package },
           { label: "Ativos", value: activeCount, className: "text-success" },
@@ -157,7 +157,7 @@ export default function ProductsPage() {
           <Card key={i} className="shadow-card">
             <CardContent className="p-4">
               <p className="text-xs text-muted-foreground">{stat.label}</p>
-              <p className={`text-xl font-bold mt-1 ${stat.className ?? ""}`}>{stat.value}</p>
+              <p className={`text-lg font-bold mt-1 truncate ${stat.className ?? ""}`}>{stat.value}</p>
             </CardContent>
           </Card>
         ))}

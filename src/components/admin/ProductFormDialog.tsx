@@ -157,7 +157,7 @@ export default function ProductFormDialog({ open, onOpenChange, product, onSave 
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
               Imagens
             </h3>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {form.image && (
                 <div className="relative aspect-square rounded-lg overflow-hidden border bg-muted">
                   <img src={form.image} alt="" className="w-full h-full object-cover" />
@@ -187,7 +187,7 @@ export default function ProductFormDialog({ open, onOpenChange, product, onSave 
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
               Preços
             </h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="price">Preço de venda *</Label>
                 <div className="relative">
@@ -248,7 +248,7 @@ export default function ProductFormDialog({ open, onOpenChange, product, onSave 
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
               Estoque & Identificação
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="sku">SKU</Label>
                 <Input
@@ -296,7 +296,7 @@ export default function ProductFormDialog({ open, onOpenChange, product, onSave 
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
               Organização
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label>Categoria *</Label>
                 <Select value={form.category} onValueChange={(v) => set("category", v)}>
