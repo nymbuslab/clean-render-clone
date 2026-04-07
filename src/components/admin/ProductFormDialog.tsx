@@ -157,7 +157,7 @@ export default function ProductFormDialog({ open, onOpenChange, product, onSave 
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
               Imagens
             </h3>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {form.image && (
                 <div className="relative aspect-square rounded-lg overflow-hidden border bg-muted">
                   <img src={form.image} alt="" className="w-full h-full object-cover" />
