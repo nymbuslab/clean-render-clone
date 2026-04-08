@@ -133,23 +133,23 @@ export default function CustomersPage() {
           {filtered.length === 0 ? (
             <p className="text-center text-muted-foreground py-12 text-sm">Nenhum cliente encontrado</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {filtered.map(c => (
-                <div key={c.id} onClick={() => openDetails(c)} className="rounded-xl border p-4 hover:shadow-card transition-shadow cursor-pointer">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Avatar className="h-10 w-10">
+                <div key={c.id} onClick={() => openDetails(c)} className="rounded-xl border p-4 hover:shadow-card transition-shadow cursor-pointer overflow-hidden">
+                  <div className="flex items-center gap-3 mb-3 min-w-0">
+                    <Avatar className="h-10 w-10 shrink-0">
                       <AvatarFallback className="bg-primary/10 text-primary text-sm font-medium">
                         {c.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 overflow-hidden">
                       <p className="font-medium truncate">{c.name}</p>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Mail className="h-3 w-3" />
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground min-w-0">
+                        <Mail className="h-3 w-3 shrink-0" />
                         <span className="truncate">{c.email}</span>
                       </div>
                     </div>
-                    <Badge variant="secondary" className={`text-xs border-0 ${
+                    <Badge variant="secondary" className={`text-xs border-0 shrink-0 ${
                       c.status === "ativo" ? "bg-success/10 text-success" :
                       c.status === "novo" ? "bg-info/10 text-info" : "bg-muted text-muted-foreground"
                     }`}>
@@ -157,16 +157,16 @@ export default function CustomersPage() {
                     </Badge>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="rounded-lg bg-muted p-2">
+                    <div className="rounded-lg bg-muted p-2 overflow-hidden">
                       <p className="text-lg font-bold">{c.orders}</p>
                       <p className="text-[10px] text-muted-foreground">Pedidos</p>
                     </div>
-                    <div className="rounded-lg bg-muted p-2">
-                      <p className="text-sm font-bold">{fmt(c.totalSpent)}</p>
+                    <div className="rounded-lg bg-muted p-2 overflow-hidden">
+                      <p className="text-xs font-bold truncate">{fmt(c.totalSpent)}</p>
                       <p className="text-[10px] text-muted-foreground">Total Gasto</p>
                     </div>
-                    <div className="rounded-lg bg-muted p-2">
-                      <p className="text-sm font-medium">{new Date(c.lastOrder).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}</p>
+                    <div className="rounded-lg bg-muted p-2 overflow-hidden">
+                      <p className="text-xs font-medium truncate">{new Date(c.lastOrder).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}</p>
                       <p className="text-[10px] text-muted-foreground">Última Compra</p>
                     </div>
                   </div>
