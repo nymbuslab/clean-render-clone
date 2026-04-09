@@ -1,3 +1,5 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -18,13 +20,44 @@ Deno.serve(async (req) => {
     })
   }
 
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+  const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+
   try {
     const body = await req.json()
-    const { payment_method, items, payer, transaction_amount, installments, token, issuer_id } = body
+    const { payment_method, items, payer, transaction_amount, installments, token, issuer_id, payment_method_id, order_data } = body
 
     if (!payment_method || !payer || !transaction_amount) {
       return new Response(JSON.stringify({ error: 'Missing required fields: payment_method, payer, transaction_amount' }), {
         status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    // Create order in database first
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    const orderPayload = {
+      payment_method,
+      total: transaction_amount,
+      subtotal: order_data?.subtotal || transaction_amount,
+      shipping: order_data?.shipping || 0,
+      discount: order_data?.discount || 0,
+      items: items || [],
+      payer,
+      status: 'pending',
+      payment_status: 'pending',
+    }
+
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert(orderPayload)
+      .select()
+      .single()
+
+    if (orderError) {
+      console.error('Error creating order:', orderError)
+      return new Response(JSON.stringify({ error: 'Failed to create order' }), {
+        status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
     }
@@ -42,6 +75,8 @@ Deno.serve(async (req) => {
           identification: payer.identification,
         },
         description: items?.map((i: { name: string }) => i.name).join(', ') || 'Compra na loja',
+        external_reference: order.id,
+        notification_url: `${supabaseUrl}/functions/v1/mercadopago-webhook`,
       }
     } else if (payment_method === 'credit_card') {
       if (!token) {
@@ -55,12 +90,14 @@ Deno.serve(async (req) => {
         token,
         installments: installments || 1,
         issuer_id,
-        payment_method_id: body.payment_method_id,
+        payment_method_id,
         payer: {
           email: payer.email,
           identification: payer.identification,
         },
         description: items?.map((i: { name: string }) => i.name).join(', ') || 'Compra na loja',
+        external_reference: order.id,
+        notification_url: `${supabaseUrl}/functions/v1/mercadopago-webhook`,
       }
     } else {
       return new Response(JSON.stringify({ error: 'Invalid payment method. Use "pix" or "credit_card"' }), {
@@ -83,22 +120,50 @@ Deno.serve(async (req) => {
 
     if (!response.ok) {
       console.error('Mercado Pago API error:', JSON.stringify(data))
-      return new Response(JSON.stringify({ 
-        error: 'Payment creation failed', 
+      // Update order with failure
+      await supabase.from('orders').update({
+        status: 'failed',
+        payment_status: 'error',
+        payment_status_detail: data.message || data.cause?.[0]?.description || 'Unknown error',
+      }).eq('id', order.id)
+
+      return new Response(JSON.stringify({
+        error: 'Payment creation failed',
         details: data.message || data.cause?.[0]?.description || 'Unknown error',
         status_code: response.status,
+        order_id: order.id,
       }), {
         status: response.status,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
     }
 
-    // Build response based on payment method
+    // Update order with payment info
+    const updateData: Record<string, unknown> = {
+      payment_id: String(data.id),
+      payment_status: data.status,
+      payment_status_detail: data.status_detail,
+      status: data.status === 'approved' ? 'approved' : 'pending',
+    }
+
+    if (payment_method === 'pix') {
+      const txData = data.point_of_interaction?.transaction_data
+      updateData.pix_data = {
+        qr_code: txData?.qr_code,
+        qr_code_base64: txData?.qr_code_base64,
+        ticket_url: txData?.ticket_url,
+      }
+    }
+
+    await supabase.from('orders').update(updateData).eq('id', order.id)
+
+    // Build response
     const result: Record<string, unknown> = {
       id: data.id,
+      order_id: order.id,
       status: data.status,
       status_detail: data.status_detail,
-      payment_method: payment_method,
+      payment_method,
     }
 
     if (payment_method === 'pix') {

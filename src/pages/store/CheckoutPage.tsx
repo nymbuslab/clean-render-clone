@@ -107,6 +107,7 @@ export default function CheckoutPage() {
           identification: { type: "CPF", number: cpfClean },
         },
         items: cartItems.map(i => ({ name: i.name, quantity: i.qty, unit_price: i.price })),
+        order_data: { subtotal, shipping, discount },
       };
 
       // For credit card, tokenize with MercadoPago.js SDK
