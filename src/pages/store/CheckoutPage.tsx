@@ -1,8 +1,9 @@
 import { Lock } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { mockProducts } from "@/data/mockData";
 import { supabase } from "@/integrations/supabase/client";
+import { createCardToken, getInstallments, getPaymentMethods, CardData } from "@/hooks/useMercadoPago";
 import CheckoutProgressSteps from "@/components/checkout/CheckoutProgressSteps";
 import PersonalInfoSection from "@/components/checkout/PersonalInfoSection";
 import AddressSection from "@/components/checkout/AddressSection";
@@ -31,6 +32,55 @@ export default function CheckoutPage() {
   const [pixData, setPixData] = useState<{ qr_code: string; qr_code_base64: string; ticket_url?: string } | null>(null);
   const [payer, setPayer] = useState({ name: "", email: "", cpf: "", phone: "" });
 
+  const [cardData, setCardData] = useState<CardData>({
+    cardNumber: "",
+    cardholderName: "",
+    expirationMonth: "",
+    expirationYear: "",
+    securityCode: "",
+  });
+  const [installments, setInstallments] = useState(1);
+  const [installmentOptions, setInstallmentOptions] = useState<{ installments: number; recommended_message: string }[]>([]);
+  const [paymentMethodId, setPaymentMethodId] = useState("");
+  const [issuerId, setIssuerId] = useState("");
+
+  // Fetch installments when card BIN changes (first 6 digits)
+  const bin = cardData.cardNumber.replace(/\s/g, "").slice(0, 6);
+  useEffect(() => {
+    if (bin.length < 6 || payMethod !== "credit_card") {
+      setInstallmentOptions([]);
+      setPaymentMethodId("");
+      setIssuerId("");
+      return;
+    }
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const [installRes, methodRes] = await Promise.all([
+          getInstallments(total, bin),
+          getPaymentMethods(bin),
+        ]);
+
+        if (cancelled) return;
+
+        if (methodRes.length > 0) {
+          setPaymentMethodId(methodRes[0].id);
+        }
+
+        if (installRes.length > 0) {
+          setIssuerId(String(installRes[0].issuer.id));
+          setInstallmentOptions(installRes[0].payer_costs);
+        }
+      } catch (err) {
+        console.error("Error fetching card info:", err);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [bin, total, payMethod]);
+
   const handleSubmit = async () => {
     if (!payer.name || !payer.email || !payer.cpf) {
       toast.error("Preencha todos os dados pessoais (nome, e-mail e CPF).");
@@ -58,6 +108,28 @@ export default function CheckoutPage() {
         },
         items: cartItems.map(i => ({ name: i.name, quantity: i.qty, unit_price: i.price })),
       };
+
+      // For credit card, tokenize with MercadoPago.js SDK
+      if (payMethod === "credit_card") {
+        if (!cardData.cardNumber || !cardData.expirationMonth || !cardData.expirationYear || !cardData.securityCode || !cardData.cardholderName) {
+          toast.error("Preencha todos os dados do cartão.");
+          setIsProcessing(false);
+          return;
+        }
+
+        try {
+          const token = await createCardToken(cardData, { type: "CPF", number: cpfClean });
+          payload.token = token;
+          payload.installments = installments;
+          payload.payment_method_id = paymentMethodId;
+          payload.issuer_id = issuerId;
+        } catch (tokenErr) {
+          console.error("Card tokenization error:", tokenErr);
+          toast.error("Erro ao processar dados do cartão. Verifique as informações.");
+          setIsProcessing(false);
+          return;
+        }
+      }
 
       const { data, error } = await supabase.functions.invoke("mercadopago-payment", {
         body: payload,
@@ -98,7 +170,15 @@ export default function CheckoutPage() {
           <PersonalInfoSection payer={payer} onChange={setPayer} />
           <AddressSection />
           <ShippingSection shipping={shipping} fmt={fmt} />
-          <PaymentSection payMethod={payMethod} onPayMethodChange={setPayMethod} />
+          <PaymentSection
+            payMethod={payMethod}
+            onPayMethodChange={setPayMethod}
+            cardData={cardData}
+            onCardDataChange={setCardData}
+            installments={installments}
+            onInstallmentsChange={setInstallments}
+            installmentOptions={installmentOptions}
+          />
         </div>
 
         <OrderSummary
