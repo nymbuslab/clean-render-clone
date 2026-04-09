@@ -1,5 +1,6 @@
 import { Lock } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { mockProducts } from "@/data/mockData";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +20,7 @@ const cartItems = [
 ];
 
 export default function CheckoutPage() {
+  const navigate = useNavigate();
   const fmt = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
   const shipping = 8;
@@ -142,12 +144,17 @@ export default function CheckoutPage() {
         setPixData(data.pix);
         setPixDialogOpen(true);
         toast.success("QR Code Pix gerado! Escaneie para pagar.");
+        // Navigate to confirmation after closing dialog
+        setTimeout(() => {
+          navigate(`/loja/confirmacao?pedido=${data.order_id}`);
+        }, 500);
       } else if (payMethod === "credit_card") {
         if (data?.status === "approved") {
           toast.success("Pagamento aprovado com sucesso!");
         } else {
           toast.info(`Status do pagamento: ${data?.status_detail || data?.status}`);
         }
+        navigate(`/loja/confirmacao?pedido=${data.order_id}`);
       }
     } catch (err) {
       console.error("Payment error:", err);
